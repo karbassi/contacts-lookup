@@ -8,16 +8,13 @@ on:
 jobs:
   build:
     name: Build and release
-    runs-on: macos-14
+    runs-on: macos-15
     permissions:
       contents: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode.app
 
       - name: Build arm64
         run: swift build -c release --arch arm64
@@ -69,26 +66,26 @@ jobs:
           cd tap
 
           cat > Formula/contacts-lookup.rb <<FORMULA
-          class ContactsLookup < Formula
-            desc "Resolve phone numbers to macOS contact names"
-            homepage "https://github.com/karbassi/contacts-lookup"
-            version "${VERSION_NO_V}"
-            license "MIT"
+class ContactsLookup < Formula
+  desc "Resolve phone numbers to macOS contact names"
+  homepage "https://github.com/karbassi/contacts-lookup"
+  version "${VERSION_NO_V}"
+  license "MIT"
 
-            on_macos do
-              url "https://github.com/karbassi/contacts-lookup/releases/download/${VERSION}/${ARCHIVE}"
-              sha256 "${SHA256}"
+  on_macos do
+    url "https://github.com/karbassi/contacts-lookup/releases/download/${VERSION}/${ARCHIVE}"
+    sha256 "${SHA256}"
 
-              def install
-                bin.install "contacts-lookup"
-              end
-            end
+    def install
+      bin.install "contacts-lookup"
+    end
+  end
 
-            test do
-              assert_match "OVERVIEW", shell_output("#{bin}/contacts-lookup --help")
-            end
-          end
-          FORMULA
+  test do
+    assert_match "OVERVIEW", shell_output("#{bin}/contacts-lookup --help")
+  end
+end
+FORMULA
 
           git config user.email "action@github.com"
           git config user.name "GitHub Actions"

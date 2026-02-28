@@ -1,31 +1,15 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  - push
+  - pull_request
 
 jobs:
   check:
     name: Lint, format, test
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install mise
-        uses: jdx/mise-action@v2
-
-      - name: Install tools
-        run: mise install
-
-      - name: Lint (SwiftLint)
-        run: mise run lint
-
-      - name: Format check (swiftformat)
-        run: mise run format:check
-
-      - name: Test
-        run: mise run test
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: mise run check

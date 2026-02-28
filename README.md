@@ -1,60 +1,71 @@
-<div align="center">
-
 # contacts-lookup
 
-**Resolve phone numbers to contact names — fast, scriptable, `imsg`-aware.**
+> Resolve phone numbers to contact names from macOS Contacts
 
-[![Swift](https://img.shields.io/badge/Swift-5.9+-orange?style=flat-square&logo=swift)](https://swift.org)
-[![macOS](https://img.shields.io/badge/macOS-12+-000000?style=flat-square&logo=apple)](https://www.apple.com/macos/)
-[![License](https://img.shields.io/github/license/karbassi/contacts-lookup?style=flat-square)](LICENSE)
-
-A macOS CLI that resolves phone numbers to display names using `CNContactStore`.<br>
-Works standalone or as a post-processor for [`imsg`](https://github.com/nicholasgetz/imsg).
-
-</div>
-
----
+Works with any phone number format. Pipe-friendly — enriches [`imsg`](https://github.com/nicholasgetz/imsg) history in place.
 
 ## Install
 
 ### Homebrew
 
-```bash
+```sh
 brew tap karbassi/tap
 brew install contacts-lookup
 ```
 
 ### From release
 
-```bash
-curl -L https://github.com/karbassi/contacts-lookup/releases/latest/download/contacts-lookup-<version>-macos-universal.tar.gz | tar xz
+```sh
+curl -L https://github.com/karbassi/contacts-lookup/releases/latest/download/contacts-lookup-v0.1.0-macos-universal.tar.gz | tar xz
 mv contacts-lookup /usr/local/bin/
 ```
 
 ### From source
 
-```bash
+```sh
 git clone https://github.com/karbassi/contacts-lookup
 cd contacts-lookup
 swift build -c release
 cp .build/release/contacts-lookup /usr/local/bin/
 ```
 
-## Quick Start
+## Usage
 
-```bash
-# Resolve phone numbers → JSON (default)
-contacts-lookup +14155551212 +16505551234
-
-# Tab-separated text
-contacts-lookup --format text +14155551212
-
-# Pipe imsg history — enrich sender + participants
-imsg history --chat-id 215 --json | contacts-lookup --enrich
-
-# Enrich + text output (sender<tab>message)
-imsg history --chat-id 215 --limit 20 --json | contacts-lookup --enrich --format text
 ```
+$ contacts-lookup --help
+
+  Resolve phone numbers to contact names from macOS Contacts.
+
+  Usage
+    $ contacts-lookup <phone> [<phone> …]
+    $ imsg history --json | contacts-lookup --enrich
+
+  Options
+    --enrich        Read NDJSON from stdin, replace sender/participants with names
+    --format        Output format: json (default) or text
+
+  Examples
+    $ contacts-lookup +14155551212 +16505551234
+    $ contacts-lookup --format text +14155551212
+    $ imsg history --chat-id 215 --json | contacts-lookup --enrich
+    $ imsg history --chat-id 215 --json | contacts-lookup --enrich --format text
+```
+
+## Phone number formats
+
+All of the following resolve to the same contact:
+
+```
++16085551212
+16085551212
+6085551212
++1 (608) 555-1212
+(608) 555-1212
+608-555-1212
+608.555.1212
+```
+
+Matching is done via `CNPhoneNumber` suffix matching. Partial suffixes work — `555-1212` will match if unambiguous. Prefix-only fragments (e.g. just an area code) do not match.
 
 ## Output formats
 
@@ -64,51 +75,6 @@ imsg history --chat-id 215 --limit 20 --json | contacts-lookup --enrich --format
 | Lookup | `--format text` | `phone\tname` one line per number |
 | Enrich | `--enrich` | NDJSON passthrough with `sender`/`participants` replaced by names |
 | Enrich | `--enrich --format text` | `sender\ttext` tab-separated lines |
-
-### Lookup — JSON
-
-```json
-[
-  {
-    "name": "Jane Doe",
-    "phone": "+14155551212"
-  },
-  {
-    "name": "",
-    "phone": "+16505551234"
-  }
-]
-```
-
-### Lookup — text
-
-```
-+14155551212	Jane Doe
-+16505551234
-```
-
-### Enrich
-
-Reads one JSON object per line from stdin, enriches in place:
-
-```jsonl
-{"sender":"Jane Doe","text":"hey","participants":["Jane Doe","+16505551234"],...}
-```
-
-## Usage
-
-```
-USAGE: contacts-lookup [<phones> ...] [--enrich] [--format <format>]
-
-ARGUMENTS:
-  <phones>        Phone numbers to resolve (e.g. +14155551212).
-                  Ignored when --enrich is used.
-
-OPTIONS:
-  --enrich        Read NDJSON from stdin, enrich sender/participants.
-  --format        Output format: json (default) or text.
-  -h, --help      Show help information.
-```
 
 ## Permissions
 
@@ -120,11 +86,10 @@ If the prompt never appears (SSH session, cron, etc.) and you see:
 
 ```
 error: contacts access denied.
-Grant access in System Settings → Privacy & Security → Contacts.
 ```
 
 Run the binary once interactively from Terminal to register it with TCC, then grant access in Settings.
 
-## License
+## Related
 
-[MIT](LICENSE)
+- [imsg](https://github.com/nicholasgetz/imsg) - Read iMessage history from the terminal

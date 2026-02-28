@@ -16,8 +16,11 @@ Initial release.
 - `--format json` (default): pretty-printed JSON array
 - `--format text`: tab-separated `phone\tname` output
 - `--enrich` mode: pipe NDJSON from `imsg history --json`, replace `sender` / `participants` with display names
-- Resolver cache: amortizes repeated CNContactStore lookups in enrich mode
-- ArgumentParser integration: proper `--help`, `validate()` for mutual exclusion
+- Resolver cache: amortizes repeated `CNContactStore` lookups in enrich mode
+- Flexible phone number input: `+16085551212`, `608-555-1212`, `(608) 555-1212`, `608.555.1212`, bare digits — all resolve via `CNPhoneNumber` suffix matching
+- ArgumentParser integration: `--help`, `validate()` for mutual exclusion of lookup and enrich modes
+- Swift 6 strict concurrency compliance
 - Universal binary (arm64 + x86_64) via GitHub Actions release workflow
-- Homebrew formula in karbassi/homebrew-tap
+- CI: SwiftLint + swiftformat + `swift test` via mise on every push
+- Homebrew formula auto-updated in `karbassi/homebrew-tap` on tag push
 - MIT license

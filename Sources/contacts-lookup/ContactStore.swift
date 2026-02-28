@@ -1,7 +1,7 @@
 import Contacts
 import Foundation
 
-struct ContactStore {
+struct ContactStore: @unchecked Sendable {
     let store: CNContactStore
 
     static let shared = ContactStore()
@@ -16,14 +16,15 @@ struct ContactStore {
         case .authorized:
             return
         case .notDetermined:
+            final class Result: @unchecked Sendable { var granted = false }
             let sema = DispatchSemaphore(value: 0)
-            var granted = false
+            let result = Result()
             CNContactStore().requestAccess(for: .contacts) { isGranted, _ in
-                granted = isGranted
+                result.granted = isGranted
                 sema.signal()
             }
             sema.wait()
-            if !granted {
+            if !result.granted {
                 fputs("error: contacts access denied\n", stderr)
                 exit(1)
             }

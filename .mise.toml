@@ -20,11 +20,11 @@ run = "swiftlint --strict Sources/ Tests/"
 
 [tasks.format]
 description = "Format source files"
-run = "swiftformat --swiftversion 5.9 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas Sources/ Tests/"
+run = "swiftformat --swiftversion 6.2 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas Sources/ Tests/"
 
 [tasks."format:check"]
 description = "Check formatting without modifying files"
-run = "swiftformat --swiftversion 5.9 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas --lint Sources/ Tests/"
+run = "swiftformat --swiftversion 6.2 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas --lint Sources/ Tests/"
 
 [tasks.fix]
 description = "Auto-fix lint and format violations"

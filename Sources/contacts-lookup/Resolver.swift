@@ -12,7 +12,7 @@ final class Resolver {
     private var cache: [String: String?] = [:]
     private let store: ContactStoreProtocol
 
-    private static let fetchKeys: [CNKeyDescriptor] = [
+    private nonisolated(unsafe) static let fetchKeys: [CNKeyDescriptor] = [
         CNContactGivenNameKey as CNKeyDescriptor,
         CNContactMiddleNameKey as CNKeyDescriptor,
         CNContactFamilyNameKey as CNKeyDescriptor,
