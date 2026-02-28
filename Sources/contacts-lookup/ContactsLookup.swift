@@ -25,10 +25,10 @@ struct ContactsLookup: ParsableCommand {
         guard validFormats.contains(format) else {
             throw ValidationError("--format must be one of: \(validFormats.joined(separator: ", "))")
         }
-        if !enrich && phones.isEmpty {
+        if !enrich, phones.isEmpty {
             throw ValidationError("Provide at least one phone number, or use --enrich to read from stdin.")
         }
-        if enrich && !phones.isEmpty {
+        if enrich, !phones.isEmpty {
             throw ValidationError("--enrich reads from stdin; do not pass phone number arguments when using it.")
         }
     }

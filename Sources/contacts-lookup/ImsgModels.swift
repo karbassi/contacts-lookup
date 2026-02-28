@@ -8,7 +8,7 @@ struct ImsgMessage: Codable {
     var date: String?
     var isFromMe: Bool?
 
-    // Capture all remaining fields so we pass them through unchanged.
+    /// Capture all remaining fields so we pass them through unchanged.
     private var extra: [String: AnyCodable] = [:]
 
     private enum CodingKeys: String, CodingKey {
@@ -47,17 +47,30 @@ struct ImsgMessage: Codable {
 
 struct DynamicKey: CodingKey {
     var stringValue: String
-    var intValue: Int? { nil }
-    init(_ string: String) { stringValue = string }
-    init?(stringValue: String) { self.stringValue = stringValue }
-    init?(intValue: Int) { return nil }
+    var intValue: Int? {
+        nil
+    }
+
+    init(_ string: String) {
+        stringValue = string
+    }
+
+    init?(stringValue: String) {
+        self.stringValue = stringValue
+    }
+
+    init?(intValue _: Int) {
+        nil
+    }
 }
 
 /// Type-erased Codable wrapper for arbitrary JSON values.
 struct AnyCodable: Codable {
     let value: Any
 
-    init(_ value: Any) { self.value = value }
+    init(_ value: Any) {
+        self.value = value
+    }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

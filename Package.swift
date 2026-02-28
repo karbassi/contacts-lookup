@@ -16,5 +16,10 @@ let package = Package(
             path: "Sources/contacts-lookup",
             exclude: ["Resources"]
         ),
+        .testTarget(
+            name: "contacts-lookupTests",
+            dependencies: ["contacts-lookup"],
+            path: "Tests/contacts-lookupTests"
+        ),
     ]
 )

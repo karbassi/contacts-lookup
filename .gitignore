@@ -1,6 +1,34 @@
+# Swift / SPM
 .build/
 .swiftpm/
-.DS_Store
-.temp/
 *.o
 *.d
+*.gcno
+*.gcda
+
+# Xcode
+*.xcodeproj/
+xcuserdata/
+*.xcworkspace/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# mise
+.mise.local.toml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Temp / scratch
+.temp/

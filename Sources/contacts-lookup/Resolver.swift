@@ -1,9 +1,16 @@
 import Contacts
 import Foundation
 
+/// Abstraction over CNContactStore so tests can inject a mock.
+protocol ContactStoreProtocol {
+    func unifiedContacts(matching predicate: NSPredicate, keysToFetch keys: [CNKeyDescriptor]) throws -> [CNContact]
+}
+
+extension CNContactStore: ContactStoreProtocol {}
+
 final class Resolver {
     private var cache: [String: String?] = [:]
-    private let store: CNContactStore
+    private let store: ContactStoreProtocol
 
     private static let fetchKeys: [CNKeyDescriptor] = [
         CNContactGivenNameKey as CNKeyDescriptor,
@@ -13,10 +20,10 @@ final class Resolver {
         CNContactNameSuffixKey as CNKeyDescriptor,
         CNContactOrganizationNameKey as CNKeyDescriptor,
         CNContactPhoneNumbersKey as CNKeyDescriptor,
-        CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+        CNContactFormatter.descriptorForRequiredKeys(for: .fullName)
     ]
 
-    init(store: CNContactStore = ContactStore.shared.store) {
+    init(store: ContactStoreProtocol = ContactStore.shared.store) {
         self.store = store
     }
 

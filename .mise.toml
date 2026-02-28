@@ -1,0 +1,39 @@
+[tools]
+swiftlint = "latest"
+swiftformat = "latest"
+
+[tasks.build]
+description = "Build debug binary"
+run = "swift build"
+
+[tasks.release]
+description = "Build release binary"
+run = "swift build -c release"
+
+[tasks.test]
+description = "Run test suite"
+run = "swift test"
+
+[tasks.lint]
+description = "Run SwiftLint (default rules)"
+run = "swiftlint --strict Sources/ Tests/"
+
+[tasks.format]
+description = "Format source files"
+run = "swiftformat --swiftversion 5.9 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas Sources/ Tests/"
+
+[tasks."format:check"]
+description = "Check formatting without modifying files"
+run = "swiftformat --swiftversion 5.9 --maxwidth 120 --disable wrapMultilineStatementBraces,trailingCommas --lint Sources/ Tests/"
+
+[tasks.fix]
+description = "Auto-fix lint and format violations"
+depends = ["format", "lint:fix"]
+
+[tasks."lint:fix"]
+description = "Auto-fix SwiftLint violations"
+run = "swiftlint --fix Sources/ Tests/"
+
+[tasks.check]
+description = "Run all checks (lint + format check + tests)"
+depends = ["lint", "format:check", "test"]

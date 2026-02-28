@@ -18,8 +18,8 @@ struct ContactStore {
         case .notDetermined:
             let sema = DispatchSemaphore(value: 0)
             var granted = false
-            CNContactStore().requestAccess(for: .contacts) { ok, _ in
-                granted = ok
+            CNContactStore().requestAccess(for: .contacts) { isGranted, _ in
+                granted = isGranted
                 sema.signal()
             }
             sema.wait()
