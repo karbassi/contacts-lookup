@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 260" fill="none">
+  <defs>
+    <style>
+      .book { fill: url(#g-light); }
+      .spine { fill: #4f46e5; }
+      @media (prefers-color-scheme: dark) {
+        .book { fill: url(#g-dark); }
+        .spine { fill: #6366f1; }
+      }
+    </style>
+    <linearGradient id="g-light" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="g-dark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+  <rect class="book" x="20" y="10" width="200" height="240" rx="20"/>
+  <rect class="spine" x="20" y="10" width="28" height="240" rx="10"/>
+  <line x1="80" y1="60" x2="185" y2="60" stroke="#e0e7ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="95" x2="170" y2="95" stroke="#e0e7ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="130" x2="185" y2="130" stroke="#e0e7ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="165" x2="160" y2="165" stroke="#e0e7ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="200" x2="175" y2="200" stroke="#e0e7ff" stroke-width="6" stroke-linecap="round"/>
+</svg>

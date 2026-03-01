@@ -1,4 +1,9 @@
-# contacts-lookup
+<div align="center">
+	<br>
+	<img width="240" src="media/logo.svg" alt="contacts-lookup">
+	<br>
+	<br>
+</div>
 
 > Resolve phone numbers to contact names from macOS Contacts
 
@@ -9,8 +14,7 @@ Works with any phone number format. Pipe-friendly — enriches [`imsg`](https://
 ### Homebrew
 
 ```sh
-brew tap karbassi/tap
-brew install contacts-lookup
+brew install karbassi/tap/contacts-lookup
 ```
 
 ### From release
