@@ -1,0 +1,19 @@
+class ContactsLookup < Formula
+  desc "Resolve phone numbers to macOS contact names"
+  homepage "https://github.com/karbassi/contacts-lookup"
+  version "${VERSION_NO_V}"
+  license "MIT"
+
+  on_macos do
+    url "${URL}"
+    sha256 "${SHA256}"
+
+    def install
+      bin.install "contacts-lookup"
+    end
+  end
+
+  test do
+    assert_match "OVERVIEW", shell_output("#{bin}/contacts-lookup --help")
+  end
+end
