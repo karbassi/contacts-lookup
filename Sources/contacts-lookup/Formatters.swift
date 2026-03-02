@@ -5,26 +5,30 @@ enum OutputFormat: String, CaseIterable {
     case text
 }
 
-// MARK: - Lookup mode (phone numbers → names)
+// MARK: - Lookup mode
 
-func runLookup(phones: [String], format: OutputFormat, resolver: Resolver) {
-    let results = resolver.resolveAll(phones)
+func runLookup(queries: [String], format: OutputFormat, resolver: Resolver, mode: LookupMode) {
+    let results = resolver.resolveAll(queries, mode: mode)
 
     switch format {
     case .json:
-        let objects: [[String: String]] = results.map { item in
-            ["phone": item.phone, "name": item.name ?? ""]
-        }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        if let data = try? encoder.encode(objects),
+        if let data = try? encoder.encode(results),
            let str = String(data: data, encoding: .utf8) {
             print(str)
         }
 
     case .text:
         for item in results {
-            print("\(item.phone)\t\(item.name ?? "")")
+            var parts = [item.query, item.name ?? ""]
+            if let phones = item.phones {
+                parts.append(phones.joined(separator: ","))
+            }
+            if let emails = item.emails {
+                parts.append(emails.joined(separator: ","))
+            }
+            print(parts.joined(separator: "\t"))
         }
     }
 }

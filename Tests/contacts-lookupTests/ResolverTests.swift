@@ -82,11 +82,11 @@ final class ResolverTests: XCTestCase {
         ]
 
         let resolver = Resolver(store: store)
-        let results = resolver.resolveAll(["+14155551212", "+19999999999"])
+        let results = resolver.resolveAll(["+14155551212", "+19999999999"], mode: .phone)
 
-        XCTAssertEqual(results[0].phone, "+14155551212")
+        XCTAssertEqual(results[0].query, "+14155551212")
         XCTAssertEqual(results[0].name, "Jane Doe")
-        XCTAssertEqual(results[1].phone, "+19999999999")
+        XCTAssertEqual(results[1].query, "+19999999999")
         XCTAssertNil(results[1].name)
     }
 }
