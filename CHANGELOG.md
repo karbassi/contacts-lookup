@@ -32,3 +32,7 @@ Initial release.
 - CI: SwiftLint + swiftformat + `swift test` via mise on every push
 - Homebrew formula auto-updated in `karbassi/homebrew-tap` on tag push
 - MIT license
+
+[Unreleased]: https://github.com/karbassi/contacts-lookup/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/karbassi/contacts-lookup/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/karbassi/contacts-lookup/commits/v0.1.0
