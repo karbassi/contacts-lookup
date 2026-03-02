@@ -20,7 +20,7 @@ brew install karbassi/tap/contacts-lookup
 ### From release
 
 ```sh
-curl -L https://github.com/karbassi/contacts-lookup/releases/latest/download/contacts-lookup-v0.1.0-macos-universal.tar.gz | tar xz
+curl -L https://github.com/karbassi/contacts-lookup/releases/latest/download/contacts-lookup-v0.2.0-macos-universal.tar.gz | tar xz
 mv contacts-lookup /usr/local/bin/
 ```
 
