@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `--name` flag: search contacts by name via `CNContact.predicateForContacts(matchingName:)`
+- `--email` flag: search contacts by email address via `CNContact.predicateForContacts(matchingEmailAddress:)`
+- Name and email lookups return phone numbers and email addresses in results
+
 ## [0.1.0] - 2026-02-28
 
 Initial release.

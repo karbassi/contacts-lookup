@@ -5,7 +5,7 @@
 	<br>
 </div>
 
-> Resolve phone numbers to contact names from macOS Contacts
+> Look up contacts by phone number, name, or email from macOS Contacts
 
 Works with any phone number format. Pipe-friendly — enriches [`imsg`](https://github.com/nicholasgetz/imsg) history in place.
 
@@ -38,21 +38,36 @@ cp .build/release/contacts-lookup /usr/local/bin/
 ```
 $ contacts-lookup --help
 
-  Resolve phone numbers to contact names from macOS Contacts.
+OVERVIEW: Look up contacts by phone number, name, or email from macOS Contacts.
 
-  Usage
-    $ contacts-lookup <phone> [<phone> …]
-    $ imsg history --json | contacts-lookup --enrich
+Phone lookup is the default. Use --name or --email to search by other fields.
+Use --enrich to pipe NDJSON from `imsg history --json` via stdin.
 
-  Options
-    --enrich        Read NDJSON from stdin, replace sender/participants with names
-    --format        Output format: json (default) or text
+USAGE: contacts-lookup [<queries> ...] [--name] [--email] [--enrich] [--format <format>]
 
-  Examples
-    $ contacts-lookup +14155551212 +16505551234
-    $ contacts-lookup --format text +14155551212
-    $ imsg history --chat-id 215 --json | contacts-lookup --enrich
-    $ imsg history --chat-id 215 --json | contacts-lookup --enrich --format text
+ARGUMENTS:
+  <queries>               Queries to look up. Phone numbers by default; use
+                          --name or --email to change.
+
+OPTIONS:
+  --name                  Search by contact name.
+  --email                 Search by email address.
+  --enrich                Read NDJSON from stdin and enrich sender/participants
+                          with contact names.
+  --format <format>       Output format: json (default) or text
+                          (tab-separated). (default: json)
+  -h, --help              Show help information.
+```
+
+### Examples
+
+```sh
+contacts-lookup +14155551212 +16505551234
+contacts-lookup --format text +14155551212
+contacts-lookup --name "Jane Doe"
+contacts-lookup --email jane@example.com
+imsg history --chat-id 215 --json | contacts-lookup --enrich
+imsg history --chat-id 215 --json | contacts-lookup --enrich --format text
 ```
 
 ## Phone number formats
@@ -75,8 +90,8 @@ Matching is done via `CNPhoneNumber` suffix matching. Partial suffixes work — 
 
 | Mode | Flag | Output |
 |------|------|--------|
-| Lookup | `--format json` (default) | Pretty-printed JSON array of `{phone, name}` |
-| Lookup | `--format text` | `phone\tname` one line per number |
+| Lookup | `--format json` (default) | Pretty-printed JSON array of `{query, name, phones, emails}` |
+| Lookup | `--format text` | `query\tname` one line per result (tab-separated) |
 | Enrich | `--enrich` | NDJSON passthrough with `sender`/`participants` replaced by names |
 | Enrich | `--enrich --format text` | `sender\ttext` tab-separated lines |
 
