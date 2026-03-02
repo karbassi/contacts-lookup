@@ -37,12 +37,20 @@ jobs:
           echo "SHA256=${SHA256}" >> "$GITHUB_ENV"
           echo "${SHA256}  ${ARCHIVE}" > "${ARCHIVE}.sha256"
 
+      - name: Extract changelog
+        run: |
+          VERSION_NO_V="${GITHUB_REF_NAME#v}"
+          NOTES=$(awk "/^## \\[${VERSION_NO_V}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          echo "NOTES<<CHANGELOG_EOF" >> "$GITHUB_ENV"
+          echo "${NOTES}" >> "$GITHUB_ENV"
+          echo "CHANGELOG_EOF" >> "$GITHUB_ENV"
+
       - uses: softprops/action-gh-release@v2
         with:
+          body: ${{ env.NOTES }}
           files: |
             ${{ env.ARCHIVE }}
             ${{ env.ARCHIVE }}.sha256
-          generate_release_notes: true
 
       - name: Update Homebrew formula
         env:
