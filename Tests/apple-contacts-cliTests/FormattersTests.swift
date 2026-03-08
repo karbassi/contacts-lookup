@@ -1,5 +1,5 @@
 import Contacts
-@testable import contacts_lookup
+@testable import apple_contacts_cli
 import XCTest
 
 final class FormattersTests: XCTestCase {

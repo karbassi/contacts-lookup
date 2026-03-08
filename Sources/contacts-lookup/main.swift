@@ -1,1 +1,0 @@
-ContactsLookup.main()

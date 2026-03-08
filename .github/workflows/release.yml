@@ -20,18 +20,18 @@ jobs:
       - name: Create universal binary
         run: |
           lipo -create \
-            .build/arm64-apple-macosx/release/contacts-lookup \
-            .build/x86_64-apple-macosx/release/contacts-lookup \
-            -output contacts-lookup
-          chmod +x contacts-lookup
-          lipo -archs contacts-lookup
-          file contacts-lookup
+            .build/arm64-apple-macosx/release/apple-contacts-cli \
+            .build/x86_64-apple-macosx/release/apple-contacts-cli \
+            -output apple-contacts-cli
+          chmod +x apple-contacts-cli
+          lipo -archs apple-contacts-cli
+          file apple-contacts-cli
 
       - name: Create release archive
         run: |
           VERSION="${{ github.ref_name }}"
-          ARCHIVE="contacts-lookup-${VERSION}-macos-universal.tar.gz"
-          tar czf "${ARCHIVE}" contacts-lookup
+          ARCHIVE="apple-contacts-cli-${VERSION}-macos-universal.tar.gz"
+          tar czf "${ARCHIVE}" apple-contacts-cli
           SHA256=$(shasum -a 256 "${ARCHIVE}" | awk '{print $1}')
           echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_ENV"
           echo "SHA256=${SHA256}" >> "$GITHUB_ENV"
@@ -60,16 +60,16 @@ jobs:
           VERSION_NO_V="${VERSION#v}"
           SHA256="${{ env.SHA256 }}"
           ARCHIVE="${{ env.ARCHIVE }}"
-          URL="https://github.com/karbassi/contacts-lookup/releases/download/${VERSION}/${ARCHIVE}"
+          URL="https://github.com/karbassi/apple-contacts-cli/releases/download/${VERSION}/${ARCHIVE}"
 
           git clone "https://x-access-token:${GH_TOKEN}@github.com/karbassi/homebrew-tap.git" tap
 
           export VERSION_NO_V SHA256 URL
-          envsubst < .github/formula.rb.tmpl > tap/Formula/contacts-lookup.rb
+          envsubst < .github/formula.rb.tmpl > tap/Formula/apple-contacts-cli.rb
 
           cd tap
           git config user.email "action@github.com"
           git config user.name "GitHub Actions"
-          git add Formula/contacts-lookup.rb
-          git commit -m "contacts-lookup ${VERSION}"
+          git add Formula/apple-contacts-cli.rb
+          git commit -m "apple-contacts-cli ${VERSION}"
           git push

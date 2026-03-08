@@ -2,6 +2,10 @@
 swiftlint = "latest"
 swiftformat = "latest"
 
+[tasks.clean]
+description = "Remove build artifacts"
+run = "swift package clean"
+
 [tasks.build]
 description = "Build debug binary"
 run = "swift build"
