@@ -93,10 +93,30 @@ final class Resolver {
 
     private func lookupContacts(predicate: NSPredicate, query: String) -> [LookupResult] {
         guard let contacts = try? store.unifiedContacts(matching: predicate, keysToFetch: Self.fetchKeys) else {
-            return [LookupResult(query: query, name: nil, phones: nil, emails: nil, birthday: nil, city: nil, organization: nil, gender: nil, pronouns: nil)]
+            return [LookupResult(
+                query: query,
+                name: nil,
+                phones: nil,
+                emails: nil,
+                birthday: nil,
+                city: nil,
+                organization: nil,
+                gender: nil,
+                pronouns: nil
+            )]
         }
         if contacts.isEmpty {
-            return [LookupResult(query: query, name: nil, phones: nil, emails: nil, birthday: nil, city: nil, organization: nil, gender: nil, pronouns: nil)]
+            return [LookupResult(
+                query: query,
+                name: nil,
+                phones: nil,
+                emails: nil,
+                birthday: nil,
+                city: nil,
+                organization: nil,
+                gender: nil,
+                pronouns: nil
+            )]
         }
         return contacts.compactMap { contact -> LookupResult? in
             guard let fullName = displayName(for: contact) else { return nil }
@@ -104,7 +124,7 @@ final class Resolver {
             let emails = contact.emailAddresses.map { $0.value as String }
 
             let birthday: String? = contact.birthday?.date.map { Self.dateFormatter.string(from: $0) }
-            let city: String? = contact.postalAddresses.first.map { $0.value.city }.flatMap { $0.isEmpty ? nil : $0 }
+            let city: String? = contact.postalAddresses.first.map(\.value.city).flatMap { $0.isEmpty ? nil : $0 }
             let org: String? = contact.organizationName.isEmpty ? nil : contact.organizationName
             let gender = genderLookup.gender(for: contact.identifier)
             let pronouns = genderLookup.pronouns(for: contact.identifier)
