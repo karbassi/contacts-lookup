@@ -6,7 +6,7 @@ final class FormattersTests: XCTestCase {
     // MARK: - LookupResult JSON encoding
 
     func testLookupResultEncodesPhoneOnly() throws {
-        let result = LookupResult(query: "+14155551212", name: "Jane Doe", phones: nil, emails: nil)
+        let result = LookupResult(query: "+14155551212", name: "Jane Doe", phones: nil, emails: nil, birthday: nil, city: nil, organization: nil, gender: nil, pronouns: nil)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let data = try encoder.encode(result)
@@ -23,7 +23,12 @@ final class FormattersTests: XCTestCase {
             query: "Jane",
             name: "Jane Doe",
             phones: ["+14155551212"],
-            emails: ["jane@example.com"]
+            emails: ["jane@example.com"],
+            birthday: nil,
+            city: nil,
+            organization: nil,
+            gender: nil,
+            pronouns: nil
         )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
@@ -35,7 +40,7 @@ final class FormattersTests: XCTestCase {
     }
 
     func testLookupResultUnknownQueryEncodesNilName() throws {
-        let result = LookupResult(query: "+19999999999", name: nil, phones: nil, emails: nil)
+        let result = LookupResult(query: "+19999999999", name: nil, phones: nil, emails: nil, birthday: nil, city: nil, organization: nil, gender: nil, pronouns: nil)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let data = try encoder.encode(result)

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-08
+
+### Added
+
+- `--format ndjson`: one JSON object per line, ideal for streaming and piping to other tools
+
 ## [0.2.0] - 2026-03-01
 
 ### Added
@@ -33,6 +39,7 @@ Initial release.
 - Homebrew formula auto-updated in `karbassi/homebrew-tap` on tag push
 - MIT license
 
-[Unreleased]: https://github.com/karbassi/contacts-lookup/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/karbassi/contacts-lookup/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/karbassi/contacts-lookup/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/karbassi/contacts-lookup/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/karbassi/contacts-lookup/commits/v0.1.0

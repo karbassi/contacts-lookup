@@ -29,7 +29,7 @@ struct ContactsLookup: ParsableCommand {
     @Flag(name: .long, help: "Read NDJSON from stdin and enrich sender/participants with contact names.")
     var enrich: Bool = false
 
-    @Option(name: .long, help: "Output format: json (default) or text (tab-separated).")
+    @Option(name: .long, help: "Output format: json (default), ndjson (one object per line), or text (tab-separated).")
     var format: String = "json"
 
     var lookupMode: LookupMode {
@@ -39,7 +39,7 @@ struct ContactsLookup: ParsableCommand {
     }
 
     func validate() throws {
-        let validFormats = ["json", "text"]
+        let validFormats = ["json", "ndjson", "text"]
         guard validFormats.contains(format) else {
             throw ValidationError("--format must be one of: \(validFormats.joined(separator: ", "))")
         }

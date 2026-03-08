@@ -2,6 +2,7 @@ import Foundation
 
 enum OutputFormat: String, CaseIterable {
     case json
+    case ndjson
     case text
 }
 
@@ -17,6 +18,16 @@ func runLookup(queries: [String], format: OutputFormat, resolver: Resolver, mode
         if let data = try? encoder.encode(results),
            let str = String(data: data, encoding: .utf8) {
             print(str)
+        }
+
+    case .ndjson:
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        for item in results {
+            if let data = try? encoder.encode(item),
+               let str = String(data: data, encoding: .utf8) {
+                print(str)
+            }
         }
 
     case .text:
@@ -74,7 +85,7 @@ func runEnrich(format: OutputFormat, resolver: Resolver) {
               let outStr = String(data: outData, encoding: .utf8) else { continue }
 
         switch format {
-        case .json:
+        case .json, .ndjson:
             print(outStr)
         case .text:
             let sender = message.sender ?? ""
