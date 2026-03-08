@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - `--format ndjson`: one JSON object per line, ideal for streaming and piping to other tools
+- Lookup results now include `birthday`, `city`, `organization`, `gender`, and `pronouns` fields
+- Gender inferred from macOS Contacts `X-GENDER` field and pronoun entries
 
 ## [0.2.0] - 2026-03-01
 
