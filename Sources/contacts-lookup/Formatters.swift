@@ -28,6 +28,11 @@ func runLookup(queries: [String], format: OutputFormat, resolver: Resolver, mode
             if let emails = item.emails {
                 parts.append(emails.joined(separator: ","))
             }
+            parts.append(item.birthday ?? "")
+            parts.append(item.city ?? "")
+            parts.append(item.organization ?? "")
+            parts.append(item.gender ?? "")
+            parts.append(item.pronouns ?? "")
             print(parts.joined(separator: "\t"))
         }
     }
