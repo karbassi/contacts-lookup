@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-03-08
+
+### Changed
+
+- Renamed project from `contacts-lookup` to `apple-contacts-cli`
+- Renamed Swift module, source/test directories, and entry point struct
+- Updated Homebrew formula, release workflow, and all documentation
+- Added `mise run clean` task
+
 ## [0.3.0] - 2026-03-08
 
 ### Added
@@ -41,7 +50,8 @@ Initial release.
 - Homebrew formula auto-updated in `karbassi/homebrew-tap` on tag push
 - MIT license
 
-[Unreleased]: https://github.com/karbassi/apple-contacts-cli/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/karbassi/apple-contacts-cli/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/karbassi/apple-contacts-cli/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/karbassi/apple-contacts-cli/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/karbassi/apple-contacts-cli/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/karbassi/apple-contacts-cli/commits/v0.1.0
