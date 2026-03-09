@@ -2,24 +2,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "contacts-lookup",
+    name: "apple-contacts-cli",
     platforms: [.macOS(.v13)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
     ],
     targets: [
         .executableTarget(
-            name: "contacts-lookup",
+            name: "apple-contacts-cli",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
-            path: "Sources/contacts-lookup",
+            path: "Sources/apple-contacts-cli",
             exclude: ["Resources"]
         ),
         .testTarget(
-            name: "contacts-lookupTests",
-            dependencies: ["contacts-lookup"],
-            path: "Tests/contacts-lookupTests"
+            name: "apple-contacts-cliTests",
+            dependencies: ["apple-contacts-cli"],
+            path: "Tests/apple-contacts-cliTests"
         ),
     ]
 )

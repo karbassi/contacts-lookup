@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.karbassi.contacts-lookup</string>
+    <string>com.karbassi.apple-contacts-cli</string>
     <key>CFBundleName</key>
-    <string>contacts-lookup</string>
+    <string>apple-contacts-cli</string>
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
     <key>NSContactsUsageDescription</key>
-    <string>contacts-lookup needs access to Contacts to resolve phone numbers to names.</string>
+    <string>apple-contacts-cli needs access to Contacts to resolve phone numbers to names.</string>
 </dict>
 </plist>

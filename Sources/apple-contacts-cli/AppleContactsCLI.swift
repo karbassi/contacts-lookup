@@ -7,9 +7,9 @@ enum LookupMode: String, CaseIterable {
     case email
 }
 
-struct ContactsLookup: ParsableCommand {
+struct AppleContactsCLI: ParsableCommand {
     static let configuration = CommandConfiguration(
-        commandName: "contacts-lookup",
+        commandName: "apple-contacts-cli",
         abstract: "Look up contacts by phone number, name, or email from macOS Contacts.",
         discussion: """
         Phone lookup is the default. Use --name or --email to search by other fields.

@@ -24,7 +24,7 @@ struct ImsgMessage: Codable {
         date = try container.decodeIfPresent(String.self, forKey: DynamicKey("date"))
         isFromMe = try container.decodeIfPresent(Bool.self, forKey: DynamicKey("isFromMe"))
 
-        let knownKeys: Set<String> = ["sender", "participants", "text", "date", "isFromMe"]
+        let knownKeys: Set = ["sender", "participants", "text", "date", "isFromMe"]
         for key in container.allKeys where !knownKeys.contains(key.stringValue) {
             extra[key.stringValue] = try container.decode(AnyCodable.self, forKey: key)
         }

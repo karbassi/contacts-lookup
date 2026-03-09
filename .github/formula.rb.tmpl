@@ -1,6 +1,6 @@
-class ContactsLookup < Formula
+class AppleContactsCli < Formula
   desc "Resolve phone numbers to macOS contact names"
-  homepage "https://github.com/karbassi/contacts-lookup"
+  homepage "https://github.com/karbassi/apple-contacts-cli"
   version "${VERSION_NO_V}"
   license "MIT"
 
@@ -9,11 +9,11 @@ class ContactsLookup < Formula
     sha256 "${SHA256}"
 
     def install
-      bin.install "contacts-lookup"
+      bin.install "apple-contacts-cli"
     end
   end
 
   test do
-    assert_match "OVERVIEW", shell_output("#{bin}/contacts-lookup --help")
+    assert_match "OVERVIEW", shell_output("#{bin}/apple-contacts-cli --help")
   end
 end

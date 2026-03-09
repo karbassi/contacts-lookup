@@ -14,10 +14,10 @@ final class GenderLookup {
     /// Look up gender for a CNContact identifier (e.g. "F73437D8-...:ABPerson").
     /// Returns "male", "female", or "non-binary".
     func gender(for identifier: String) -> String? {
-        if let g = genderMap[identifier] { return g }
+        if let gender = genderMap[identifier] { return gender }
         // Infer from pronouns if X-GENDER not set
-        if let p = pronounsMap[identifier] {
-            return genderFromPronouns(p)
+        if let pronouns = pronounsMap[identifier] {
+            return genderFromPronouns(pronouns)
         }
         return nil
     }
@@ -60,21 +60,21 @@ final class GenderLookup {
     }
 
     private func loadFromDB(_ url: URL) {
-        var db: OpaquePointer?
-        guard sqlite3_open_v2(url.path, &db, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        var database: OpaquePointer?
+        guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return
         }
-        defer { sqlite3_close(db) }
+        defer { sqlite3_close(database) }
 
         let sql = """
-            SELECT r.ZUNIQUEID, u.ZPROPERTYNAME, u.ZORIGINALLINE
-            FROM ZABCDUNKNOWNPROPERTY u
-            JOIN ZABCDRECORD r ON u.ZOWNER = r.Z_PK
-            WHERE u.ZPROPERTYNAME IN ('X-GENDER', 'X-CUSTOM')
-            """
+        SELECT r.ZUNIQUEID, u.ZPROPERTYNAME, u.ZORIGINALLINE
+        FROM ZABCDUNKNOWNPROPERTY u
+        JOIN ZABCDRECORD r ON u.ZOWNER = r.Z_PK
+        WHERE u.ZPROPERTYNAME IN ('X-GENDER', 'X-CUSTOM')
+        """
 
         var stmt: OpaquePointer?
-        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else {
+        guard sqlite3_prepare_v2(database, sql, -1, &stmt, nil) == SQLITE_OK else {
             return
         }
         defer { sqlite3_finalize(stmt) }

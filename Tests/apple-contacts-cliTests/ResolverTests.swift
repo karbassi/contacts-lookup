@@ -1,5 +1,5 @@
+@testable import apple_contacts_cli
 import Contacts
-@testable import contacts_lookup
 import XCTest
 
 // MARK: - Mock store
