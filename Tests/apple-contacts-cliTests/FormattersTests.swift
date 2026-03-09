@@ -84,11 +84,7 @@ final class FormattersTests: XCTestCase {
             from: Data(#"{"sender":"+14155551212","text":"hello"}"#.utf8)
         )
 
-        if let senderPhone = message.sender, !senderPhone.isEmpty {
-            if let name = resolver.resolve(senderPhone) {
-                message.sender = name
-            }
-        }
+        enrichMessage(&message, resolver: resolver)
 
         XCTAssertEqual(message.sender, "Jane Doe")
     }
@@ -105,13 +101,26 @@ final class FormattersTests: XCTestCase {
             from: Data(#"{"sender":"me","participants":["+14155551212","+19999999999"]}"#.utf8)
         )
 
-        if let participants = message.participants {
-            message.participants = participants.map { phone in
-                resolver.resolve(phone) ?? phone
-            }
-        }
+        enrichMessage(&message, resolver: resolver)
 
         XCTAssertEqual(message.participants, ["Jane Doe", "+19999999999"])
+    }
+
+    func testEnrichReplacesDestinationCallerIdWithName() throws {
+        let store = MockContactStore()
+        store.contactsByPhone["+19522701020"] = [
+            MockContactStore.makeContact(givenName: "Ali", familyName: "K", phone: "+19522701020")
+        ]
+        let resolver = Resolver(store: store)
+
+        var message = try JSONDecoder().decode(
+            ImsgMessage.self,
+            from: Data(#"{"sender":"+14155551212","destination_caller_id":"+19522701020","text":"hello"}"#.utf8)
+        )
+
+        enrichMessage(&message, resolver: resolver)
+
+        XCTAssertEqual(message.destinationCallerId, "Ali K")
     }
 
     func testEnrichPreservesUnknownSender() throws {
@@ -122,11 +131,7 @@ final class FormattersTests: XCTestCase {
             from: Data(#"{"sender":"+19999999999","text":"hi"}"#.utf8)
         )
 
-        if let senderPhone = message.sender, !senderPhone.isEmpty {
-            if let name = resolver.resolve(senderPhone) {
-                message.sender = name
-            }
-        }
+        enrichMessage(&message, resolver: resolver)
 
         XCTAssertEqual(message.sender, "+19999999999")
     }

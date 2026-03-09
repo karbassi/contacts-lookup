@@ -1,4 +1,5 @@
 import ArgumentParser
+import Darwin
 import Foundation
 
 enum LookupMode: String, CaseIterable {
@@ -13,6 +14,7 @@ struct AppleContactsCLI: ParsableCommand {
         abstract: "Look up contacts by phone number, name, or email from macOS Contacts.",
         discussion: """
         Phone lookup is the default. Use --name or --email to search by other fields.
+        Queries can also be piped via stdin (one per line) when no arguments are given.
         Use --enrich to pipe NDJSON from `imsg history --json` via stdin.
         """
     )
@@ -49,26 +51,37 @@ struct AppleContactsCLI: ParsableCommand {
         if enrich, name || email {
             throw ValidationError("--name and --email cannot be used with --enrich.")
         }
-        if !enrich, queries.isEmpty {
-            throw ValidationError(
-                "Provide at least one query, or use --enrich to read from stdin."
-            )
-        }
         if enrich, !queries.isEmpty {
             throw ValidationError("--enrich reads from stdin; do not pass arguments when using it.")
         }
     }
 
     func run() throws {
-        ContactStore.requestAccessOrExit()
-
         let outputFormat = OutputFormat(rawValue: format) ?? .json
-        let resolver = Resolver()
 
         if enrich {
+            ContactStore.requestAccessOrExit()
+            let resolver = Resolver()
             runEnrich(format: outputFormat, resolver: resolver)
         } else {
-            runLookup(queries: queries, format: outputFormat, resolver: resolver, mode: lookupMode)
+            var effectiveQueries = queries
+            if effectiveQueries.isEmpty {
+                guard isatty(fileno(stdin)) == 0 else {
+                    throw CleanExit.helpRequest(self)
+                }
+                while let line = readLine(strippingNewline: true) {
+                    let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !trimmed.isEmpty {
+                        effectiveQueries.append(trimmed)
+                    }
+                }
+                guard !effectiveQueries.isEmpty else {
+                    throw ValidationError("No queries provided via arguments or stdin.")
+                }
+            }
+            ContactStore.requestAccessOrExit()
+            let resolver = Resolver()
+            runLookup(queries: effectiveQueries, format: outputFormat, resolver: resolver, mode: lookupMode)
         }
     }
 }

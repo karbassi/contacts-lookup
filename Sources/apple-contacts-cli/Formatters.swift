@@ -51,6 +51,26 @@ func runLookup(queries: [String], format: OutputFormat, resolver: Resolver, mode
 
 // MARK: - Enrich mode (NDJSON from stdin)
 
+func enrichMessage(_ message: inout ImsgMessage, resolver: Resolver) {
+    if let senderPhone = message.sender, !senderPhone.isEmpty {
+        if let name = resolver.resolve(senderPhone) {
+            message.sender = name
+        }
+    }
+
+    if let participants = message.participants {
+        message.participants = participants.map { phone in
+            resolver.resolve(phone) ?? phone
+        }
+    }
+
+    if let destPhone = message.destinationCallerId, !destPhone.isEmpty {
+        if let name = resolver.resolve(destPhone) {
+            message.destinationCallerId = name
+        }
+    }
+}
+
 func runEnrich(format: OutputFormat, resolver: Resolver) {
     let decoder = JSONDecoder()
     let encoder = JSONEncoder()
@@ -62,24 +82,11 @@ func runEnrich(format: OutputFormat, resolver: Resolver) {
               let data = trimmed.data(using: .utf8) else { continue }
 
         guard var message = try? decoder.decode(ImsgMessage.self, from: data) else {
-            // Pass through lines we can't parse
             print(trimmed)
             continue
         }
 
-        // Enrich sender
-        if let senderPhone = message.sender, !senderPhone.isEmpty {
-            if let name = resolver.resolve(senderPhone) {
-                message.sender = name
-            }
-        }
-
-        // Enrich participants
-        if let participants = message.participants {
-            message.participants = participants.map { phone in
-                resolver.resolve(phone) ?? phone
-            }
-        }
+        enrichMessage(&message, resolver: resolver)
 
         guard let outData = try? encoder.encode(message),
               let outStr = String(data: outData, encoding: .utf8) else { continue }
