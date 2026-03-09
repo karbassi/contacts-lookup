@@ -114,6 +114,27 @@ final class FormattersTests: XCTestCase {
         XCTAssertEqual(message.participants, ["Jane Doe", "+19999999999"])
     }
 
+    func testEnrichReplacesDestinationCallerIdWithName() throws {
+        let store = MockContactStore()
+        store.contactsByPhone["+19522701020"] = [
+            MockContactStore.makeContact(givenName: "Ali", familyName: "K", phone: "+19522701020")
+        ]
+        let resolver = Resolver(store: store)
+
+        var message = try JSONDecoder().decode(
+            ImsgMessage.self,
+            from: Data(#"{"sender":"+14155551212","destination_caller_id":"+19522701020","text":"hello"}"#.utf8)
+        )
+
+        if let destPhone = message.destinationCallerId, !destPhone.isEmpty {
+            if let name = resolver.resolve(destPhone) {
+                message.destinationCallerId = name
+            }
+        }
+
+        XCTAssertEqual(message.destinationCallerId, "Ali K")
+    }
+
     func testEnrichPreservesUnknownSender() throws {
         let resolver = Resolver(store: MockContactStore())
 

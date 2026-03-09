@@ -4,6 +4,7 @@ import Foundation
 struct ImsgMessage: Codable {
     var sender: String?
     var participants: [String]?
+    var destinationCallerId: String?
     var text: String?
     var date: String?
     var isFromMe: Bool?
@@ -13,6 +14,7 @@ struct ImsgMessage: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case sender, participants, text, date, isFromMe
+        case destinationCallerId = "destination_caller_id"
     }
 
     init(from decoder: Decoder) throws {
@@ -20,11 +22,12 @@ struct ImsgMessage: Codable {
 
         sender = try container.decodeIfPresent(String.self, forKey: DynamicKey("sender"))
         participants = try container.decodeIfPresent([String].self, forKey: DynamicKey("participants"))
+        destinationCallerId = try container.decodeIfPresent(String.self, forKey: DynamicKey("destination_caller_id"))
         text = try container.decodeIfPresent(String.self, forKey: DynamicKey("text"))
         date = try container.decodeIfPresent(String.self, forKey: DynamicKey("date"))
         isFromMe = try container.decodeIfPresent(Bool.self, forKey: DynamicKey("isFromMe"))
 
-        let knownKeys: Set = ["sender", "participants", "text", "date", "isFromMe"]
+        let knownKeys: Set = ["sender", "participants", "destination_caller_id", "text", "date", "isFromMe"]
         for key in container.allKeys where !knownKeys.contains(key.stringValue) {
             extra[key.stringValue] = try container.decode(AnyCodable.self, forKey: key)
         }
@@ -34,6 +37,7 @@ struct ImsgMessage: Codable {
         var container = encoder.container(keyedBy: DynamicKey.self)
         try container.encodeIfPresent(sender, forKey: DynamicKey("sender"))
         try container.encodeIfPresent(participants, forKey: DynamicKey("participants"))
+        try container.encodeIfPresent(destinationCallerId, forKey: DynamicKey("destination_caller_id"))
         try container.encodeIfPresent(text, forKey: DynamicKey("text"))
         try container.encodeIfPresent(date, forKey: DynamicKey("date"))
         try container.encodeIfPresent(isFromMe, forKey: DynamicKey("isFromMe"))

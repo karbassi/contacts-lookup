@@ -6,15 +6,17 @@ final class ImsgModelsTests: XCTestCase {
     private let encoder = JSONEncoder()
 
     func testDecodesKnownFields() throws {
-        let json = Data("""
-        {"sender":"+14155551212","text":"hello","participants":["+14155551212","+16505551234"],"isFromMe":false}
-        """.utf8)
+        let jsonStr = #"{"sender":"+14155551212","text":"hello","# +
+            #""participants":["+14155551212","+16505551234"],"# +
+            #""isFromMe":false,"destination_caller_id":"+19522701020"}"#
+        let json = Data(jsonStr.utf8)
 
         let msg = try decoder.decode(ImsgMessage.self, from: json)
         XCTAssertEqual(msg.sender, "+14155551212")
         XCTAssertEqual(msg.text, "hello")
         XCTAssertEqual(msg.participants, ["+14155551212", "+16505551234"])
         XCTAssertEqual(msg.isFromMe, false)
+        XCTAssertEqual(msg.destinationCallerId, "+19522701020")
     }
 
     func testPreservesUnknownFields() throws {
