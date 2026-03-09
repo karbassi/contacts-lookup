@@ -1,4 +1,5 @@
 import ArgumentParser
+import Darwin
 import Foundation
 
 enum LookupMode: String, CaseIterable {
@@ -56,12 +57,11 @@ struct AppleContactsCLI: ParsableCommand {
     }
 
     func run() throws {
-        ContactStore.requestAccessOrExit()
-
         let outputFormat = OutputFormat(rawValue: format) ?? .json
-        let resolver = Resolver()
 
         if enrich {
+            ContactStore.requestAccessOrExit()
+            let resolver = Resolver()
             runEnrich(format: outputFormat, resolver: resolver)
         } else {
             var effectiveQueries = queries
@@ -79,6 +79,8 @@ struct AppleContactsCLI: ParsableCommand {
                     throw ValidationError("No queries provided via arguments or stdin.")
                 }
             }
+            ContactStore.requestAccessOrExit()
+            let resolver = Resolver()
             runLookup(queries: effectiveQueries, format: outputFormat, resolver: resolver, mode: lookupMode)
         }
     }

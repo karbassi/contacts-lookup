@@ -51,7 +51,7 @@ func runLookup(queries: [String], format: OutputFormat, resolver: Resolver, mode
 
 // MARK: - Enrich mode (NDJSON from stdin)
 
-private func enrichMessage(_ message: inout ImsgMessage, resolver: Resolver) {
+func enrichMessage(_ message: inout ImsgMessage, resolver: Resolver) {
     if let senderPhone = message.sender, !senderPhone.isEmpty {
         if let name = resolver.resolve(senderPhone) {
             message.sender = name

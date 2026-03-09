@@ -12,11 +12,6 @@ struct ImsgMessage: Codable {
     /// Capture all remaining fields so we pass them through unchanged.
     private var extra: [String: AnyCodable] = [:]
 
-    private enum CodingKeys: String, CodingKey {
-        case sender, participants, text, date, isFromMe
-        case destinationCallerId = "destination_caller_id"
-    }
-
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: DynamicKey.self)
 
